@@ -1,4 +1,4 @@
-package com.tese1;
+package tese1;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -15,6 +15,10 @@ public class patient {
             @Override
             public PatientData map(String value) {
                 String[] parts = value.split(",");
+                if (parts.length != 8) {
+                    System.err.println("Invalid data format: " + value);
+                    return null;
+                }
                 return new PatientData(
                         Integer.parseInt(parts[0]),
                         Float.parseFloat(parts[1]),
@@ -22,10 +26,11 @@ public class patient {
                         Integer.parseInt(parts[3]),
                         Integer.parseInt(parts[4]),
                         Float.parseFloat(parts[5]),
-                        Float.parseFloat(parts[6])
+                        Float.parseFloat(parts[6]),
+                        Integer.parseInt(parts[7])
                 );
             }
-        });
+        }).filter(data -> data != null);
 
         healthData.map(new HealthChecker()).print();
 
@@ -54,6 +59,10 @@ public class patient {
                 alertMessage.append("Abnormal blood pressure detected! ");
             }
 
+            if (alertMessage.length() == 0) {
+                alertMessage.append("Normal health condition.");
+            }
+
             return new HealthAlert(data.patientId, alertMessage.toString());
         }
     }
@@ -65,11 +74,11 @@ class PatientData {
     float gpt;
     int sex;
     int glucose;
-    int oxygen;
-    int bpSystolic;
+    float oxygen;
+    float bpSystolic;
     int bpDiastolic;
 
-    public PatientData(int patientId, float got, float gpt, int sex, int glucose, int oxygen, int bpSystolic, int bpDiastolic) {
+    public PatientData(int patientId, float got, float gpt, int sex, int glucose, float oxygen, float bpSystolic, int bpDiastolic) {
         this.patientId = patientId;
         this.got = got;
         this.gpt = gpt;
@@ -78,9 +87,6 @@ class PatientData {
         this.oxygen = oxygen;
         this.bpSystolic = bpSystolic;
         this.bpDiastolic = bpDiastolic;
-    }
-
-    public PatientData(int patientId, float got, float gpt, int sex, int glucose, float v, float v1) {
     }
 }
 
