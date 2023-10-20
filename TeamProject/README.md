@@ -25,6 +25,11 @@ Consume real-time data from message queue
 Process and analyze using streaming processing system  
 Persist the results to data sinks (File System/Database)  
 
+## Project Setup
+
+1. Install and Deploy Apache Flink following instructions on https://nightlies.apache.org/flink/flink-docs-stable/docs/try-flink/local_installation/  
+2. Create a Maven project and use `pom.xml` and all java files in our folder
+3. Compile and run `frund2.java` and `patient.java`
 
 ## Team Project Sprint 1 (BU Access Needed)
 
