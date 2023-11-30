@@ -31,10 +31,9 @@ public class Analysis {
         DataStream<Sale> sales = rawSales.map(new MapFunction<String, Sale>() {
             @Override
             public Sale map(String value) throws Exception {
-                System.out.println(value);
                 String[] parts = value.replace("\n","").split(" ");
                 if (parts.length < 3) {
-                    System.err.println("Invalid transaction format: " + value);
+                    System.err.println("Invalid Sale format: " + value);
                     return null;
                 }
                 return new Sale(
